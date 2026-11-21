@@ -1,5 +1,5 @@
 import { randomUUID } from "node:crypto";
-export const SMS_BATCH_SIZE=50;
+export const SMS_BATCH_SIZE=25;
 export const SMS_MAX_RECIPIENTS=10000;
 export function normalizePhones(input){
  if(typeof input!=="string"||input.length>350000)throw Error("ნომრების სია ძალიან დიდია");
