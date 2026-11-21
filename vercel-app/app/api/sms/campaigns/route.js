@@ -34,7 +34,7 @@ export async function GET(request){
     if(!data)continue;
     const c=JSON.parse(await new Response(data.stream).text());
     const receipts=await list({prefix:"sms/results/"+c.id+"/",limit:1000});
-    items.push({id:c.id,createdAt:c.createdAt,text:c.text,recipientCount:c.recipientCount,batches:c.batches,processedBatches:receipts.blobs.length,submitted:receipts.blobs.reduce((n,b)=>n+(Number((b.pathname.match(/\/(\d+)\-(\d+)\.json$/)||[])[2])||0),0)});
+    items.push({id:c.id,createdAt:c.createdAt,text:c.text,recipientCount:c.recipientCount,batches:c.batches,processedBatches:receipts.blobs.length});
   }
   return NextResponse.json({items,hasMore:!!records.cursor},{headers:{"cache-control":"no-store"}});
  }catch(error){console.error("SMS history error",error?.name);return fail("ისტორიის წაკითხვა ვერ მოხერხდა",503);}
