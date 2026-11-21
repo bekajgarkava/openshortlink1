@@ -36,13 +36,8 @@ export default function Home(){
      </form>}
      {error&&<p role="alert" className="message">{error}</p>}
     </section>
-    <section className="panel visual"><div className="visual-inner"><div className="visual-tag">ISURVE.GE · SINCE 2017</div><div className="visual-copy"><h2>მარტივი ბმულები.<br/>ძლიერი ბრენდი.</h2><p>პროდუქტები და შეთავაზებები უფრო მარტივად მიაწოდე მომხმარებელს.</p></div></div></section>
+    <section className="panel visual" aria-label="ISURVE ბრენდული ილუსტრაცია"></section>
    </div>
-   <section className="tiles" aria-label="უპირატესობები">
-    <div className="tile"><div className="tile-icon"><Icon name="bolt" size={21}/></div><div><h3>სწრაფი</h3><p>მოკლე ბმული რამდენიმე წამში.</p></div></div>
-    <div className="tile"><div className="tile-icon"><Icon name="link" size={21}/></div><div><h3>ბრენდული</h3><p>სუფთა და ადვილად გასაზიარებელი მისამართი.</p></div></div>
-    <div className="tile"><div className="tile-icon"><Icon name="shield" size={21}/></div><div><h3>დაცული</h3><p>ბმულების შექმნა მხოლოდ ადმინისტრატორისთვის.</p></div></div>
-   </section>
    <footer className="footer">© 2017–2026 <a href="https://isurve.ge" target="_blank" rel="noreferrer">ISURVE.GE</a> · ყველა უფლება დაცულია</footer>
  </div></main>;
 }
