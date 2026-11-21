@@ -14,3 +14,5 @@
 .sms-history-table .sms-body{white-space:pre-wrap;overflow-wrap:anywhere;max-width:490px}
 .sms-empty{color:#76849c;font-size:14px;margin:22px 0}
 @media(max-width:760px){.sms-history-page{padding:18px}.sms-history-table{min-width:580px}}
+
+.sms-history-actions{display:flex;justify-content:flex-end;align-items:center;margin-top:18px}.sms-history-actions .sms-history-link{margin:0;display:inline-flex;align-items:center;gap:6px;padding:7px 10px;font-size:11px;color:#8b9bb1;font-weight:600;border:1px solid transparent;border-radius:9px;transition:all .15s ease}.sms-history-actions .sms-history-link:hover{color:#315fb5;border-color:#e4ebf7;background:#f7f9fd;text-decoration:none}
