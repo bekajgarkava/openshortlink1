@@ -11,7 +11,7 @@ export async function POST(request){
  if(!process.env.BLOB_READ_WRITE_TOKEN)return fail("საცავი მიუწვდომელია",503);
  try{
   const body=await request.json();
-  if(body.consent!==true || body.confirmed!==true)return fail("აუცილებელია მიმღებების თანხმობისა და გაგზავნის დადასტურება",400);
+  if(body.confirmed!==true)return fail("გაგზავნა უნდა დადასტურდეს",400);
   const {numbers,duplicates,invalidCount}=normalizePhones(body.numbers);
   const message=assertMessage(body.text);
   if(invalidCount) return fail("სიაში არასწორი ნომრებია; გაასწორეთ ისინი გაგზავნამდე",400);
