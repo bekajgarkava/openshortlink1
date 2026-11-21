@@ -79,7 +79,7 @@ export default function Home(){
     <section className="panel form-panel">
      <div className="eyebrow"><Icon name="link" size={14}/> ISURVE.LINK</div>
      
-     {authenticated===null?<p>იტვირთება...</p>:authenticated?<>
+     {authenticated===null?<p>იტვირთება...</p>:authenticated?<><nav className="app-tabs" aria-label="სამუშაო ტაბები"><button type="button" className={tab==="links"?"app-tab active":"app-tab"} onClick={()=>setTab("links")}>ბმულის შემოკლება</button><button type="button" className={tab==="sms"?"app-tab active":"app-tab"} onClick={()=>{setTab("sms");loadHistory();}}>SMS-ის გაგზავნა</button></nav>{tab==="links"?<>
       <form onSubmit={submit}><label className="field-label" htmlFor="longUrl">შეიყვანე ბმული</label><div className="field-group"><input id="longUrl" aria-label="ბმული" className="field" type="url" required placeholder="https://isurve.ge/products/..." value={url} onChange={e=>setUrl(e.target.value)}/></div><button className="primary" type="submit" disabled={busy}><Icon name="link"/>{busy?"მუშავდება...":"ბმულის შემოკლება"}</button></form>
       {result&&<div className="result"><div className="result-title">შექმნილი მოკლე ბმული</div><a className="result-link" href={result} target="_blank" rel="noreferrer">{result}</a><button className="copy" type="button" onClick={copy}><Icon name={copied?"check":"copy"}/>{copied?"დაკოპირებულია":"კოპირება"}</button></div>}
      </>:<div className="sms-workspace">
