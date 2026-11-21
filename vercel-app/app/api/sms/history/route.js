@@ -2,6 +2,7 @@ import {get,list} from "@vercel/blob";
 import {NextResponse} from "next/server";
 import {isAuthenticated} from "../../../../lib/auth";
 import {SMS_BATCH_SIZE} from "../../../../lib/sms";
+const HISTORY_RESET_AT="2026-11-21T20:51:29.342Z";
 export const runtime="nodejs";
 export const maxDuration=60;
 const fail=(error,status)=>NextResponse.json({error},{status,headers:{"cache-control":"no-store"}});
@@ -15,7 +16,7 @@ export async function GET(request){
    const result=await list({prefix:"sms/campaigns/",limit:100,...(cursor?{cursor}:{})});
    for(const record of result.blobs){
     const file=await get(record.pathname,{access:"private"});
-    if(file){const c=JSON.parse(await new Response(file.stream).text());campaigns.push(c);}
+    if(file){const c=JSON.parse(await new Response(file.stream).text());if(c.createdAt>HISTORY_RESET_AT)campaigns.push(c);}
    }
    cursor=result.cursor;if(!cursor)break;
   }
