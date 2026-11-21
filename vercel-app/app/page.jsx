@@ -78,7 +78,7 @@ export default function Home(){
        <label htmlFor="smsText" className="field-label">SMS-ის ტექსტი</label>
        <textarea id="smsText" className="field sms-message" value={smsText} onChange={e=>{setSmsText(e.target.value);}} required placeholder="შეიყვანეთ SMS-ის ტექსტი..." />
        <div className="sms-counter">{[...smsText].length} / 320 სიმბოლო</div>
-       <button className="primary" type="submit" disabled={smsBusy||[...smsText].length>320||!smsText.trim()||!phones.trim()}>{smsBusy?"იგზავნება...":"SMS-ის გაგზავნა"}</button>
+       <button className={smsBusy?"primary is-loading":"primary"} type="submit" disabled={smsBusy||[...smsText].length>320||!smsText.trim()||!phones.trim()}>{smsBusy?"იგზავნება...":"SMS-ის გაგზავნა"}</button>
       </form>
       {smsError&&<p className="message" role="alert">{smsError}</p>}
       {smsInfo&&<div className="sms-success" role="status"><Icon name="check" size={21}/><strong>{smsInfo}</strong></div>}
