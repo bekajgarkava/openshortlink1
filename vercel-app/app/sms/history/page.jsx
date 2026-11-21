@@ -12,7 +12,7 @@ export default function SmsHistory(){
    setMore(data.hasMore);
   }catch(e){setError(e.message);}finally{setLoading(false);}
  }
- useEffect(()=>{load();},[]);
+ useEffect(()=>{(async()=>{try{await fetch("/api/sms/history/cleanup",{method:"POST"});}catch{}await load();})();},[]);
  return <main className="shell"><div className="container">
   <header className="topbar"><a className="brand" href="/"><span className="brandmark">↗</span><span>ISURVE<small>SMS HISTORY</small></span></a><a className="sms-history-link" href="/">← უკან დაბრუნება</a></header>
   <section className="panel sms-history-page"><h1>SMS-ის ისტორია</h1>
