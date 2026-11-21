@@ -2,9 +2,10 @@ import { put } from "@vercel/blob";
 import { createHash } from "node:crypto";
 import { ipAddress } from "@vercel/functions";
 import { NextResponse } from "next/server";
-import { validCredentials, makeSession, cookieOptions, cookieName } from "../../../lib/auth";
+import { validCredentials, makeSession, cookieOptions, cookieName, checkOrigin } from "../../../lib/auth";
 export const runtime="nodejs";
 export async function POST(request) {
+  if(!checkOrigin(request))return NextResponse.json({error:"მოთხოვნის არასწორი წყარო"},{status:403});
   const ip = ipAddress(request) || "unknown";
   const bucket = Math.floor(Date.now()/900000);
   const key = createHash("sha256").update(ip).digest("hex");
