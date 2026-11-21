@@ -24,8 +24,7 @@ export default function Home(){
    <div className="main-grid">
     <section className="panel form-panel">
      <div className="eyebrow"><Icon name="link" size={14}/> ISURVE.LINK</div>
-     <h1 className="h1">მოკლე ბმულები.<br/>მარტივი გაზიარება.</h1>
-     <p className="intro">ერთი ბმული, რომელიც მარტივად შეგიძლია გამოიყენო შეტყობინებაში, კამპანიაში ან სოციალურ ქსელში.</p>
+     
      {authenticated===null?<p>იტვირთება...</p>:authenticated?<>
       <form onSubmit={submit}><label className="field-label" htmlFor="longUrl">შეიყვანე ბმული</label><div className="field-group"><input id="longUrl" aria-label="ბმული" className="field" type="url" required placeholder="https://isurve.ge/products/..." value={url} onChange={e=>setUrl(e.target.value)}/></div><button className="primary" type="submit" disabled={busy}><Icon name="link"/>{busy?"მუშავდება...":"ბმულის შემოკლება"}</button></form>
       {result&&<div className="result"><div className="result-title">შექმნილი მოკლე ბმული</div><a className="result-link" href={result} target="_blank" rel="noreferrer">{result}</a><button className="copy" type="button" onClick={copy}><Icon name={copied?"check":"copy"}/>{copied?"დაკოპირებულია":"კოპირება"}</button></div>}
