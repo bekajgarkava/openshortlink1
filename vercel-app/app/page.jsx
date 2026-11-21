@@ -62,10 +62,10 @@ export default function Home(){
  }
 
  return <main className="shell"><div className="container">
-   <header className="topbar"><a href="https://isurve.ge" className="brand"><span className="brandmark"><Icon name="link" size={23}/></span><span>ISURVE<small>LINK SHORTENER</small></span></a>{authenticated===true&&<button className="exit" type="button" onClick={logout}>გასვლა</button>}</header>
+   <header className="topbar"><a href="/" className="brand"><span className="brandmark"><Icon name="shield" size={23}/></span><span>ISURVE<small>TOOLS</small></span></a>{authenticated===true&&<button className="exit" type="button" onClick={logout}>გასვლა</button>}</header>
    <div className="main-grid">
     <section className="panel form-panel">
-     <div className="eyebrow"><Icon name="link" size={14}/> ISURVE.LINK</div>
+     
      
      {authenticated===null?<p>იტვირთება...</p>:authenticated?<><nav className="app-tabs" aria-label="სამუშაო ტაბები"><button type="button" className={tab==="links"?"app-tab active":"app-tab"} onClick={()=>setTab("links")}>ბმულის შემოკლება</button><button type="button" className={tab==="sms"?"app-tab active":"app-tab"} onClick={()=>{setTab("sms");}}>SMS-ის გაგზავნა</button></nav>{tab==="links"?<>
       <form onSubmit={submit}><label className="field-label" htmlFor="longUrl">შეიყვანე ბმული</label><div className="field-group"><input id="longUrl" aria-label="ბმული" className="field" type="url" required placeholder="https://isurve.ge/products/..." value={url} onChange={e=>setUrl(e.target.value)}/></div><button className="primary" type="submit" disabled={busy}><Icon name="link"/>{busy?"მუშავდება...":"ბმულის შემოკლება"}</button></form>
