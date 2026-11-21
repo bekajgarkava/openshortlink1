@@ -1,8 +1,7 @@
 import { createHmac, randomBytes, scryptSync, timingSafeEqual } from "node:crypto";
 import { get, put } from "@vercel/blob";
 const COOKIE = "isurve_admin_session";
-const MAX_AGE = 60 * 60 * 24;
-const forbidden = () => ({ allowed:false });
+const MAX_AGE = 60 * 60 * 24 * 30;
 function signature(value) {
  const secret=process.env.SHORTENER_SESSION_SECRET;
  return secret?createHmac("sha256",secret).update(value).digest("hex"):null;
@@ -49,7 +48,7 @@ export async function revokeSession(request) {
  const session=parseSession(request);
  if(!session||!process.env.BLOB_READ_WRITE_TOKEN)return false;
  try {
-  await put(revocationPath(session.nonce),"revoked",{access:"private",addRandomSuffix:false,allowOverwrite:true,ttlDays:2,contentType:"text/plain"});
+  await put(revocationPath(session.nonce),"revoked",{access:"private",addRandomSuffix:false,allowOverwrite:true,ttlDays:31,contentType:"text/plain"});
   return true;
  }catch(error){console.error("Session revocation error",error);return false;}
 }
