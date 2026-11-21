@@ -2,6 +2,7 @@ import { put } from "@vercel/blob";
 import { createHash, randomBytes } from "node:crypto";
 import { ipAddress } from "@vercel/functions";
 import { NextResponse } from "next/server";
+import { isAuthenticated } from "../../../lib/auth";
 export const runtime = "nodejs";
 const fail=(error,status,headers={})=>NextResponse.json({error},{status,headers:{"cache-control":"no-store",...headers}});
 // Fixed 60-second windows, 10 successful reservations per client IP.
@@ -26,6 +27,7 @@ async function consumeQuota(request){
  return {allowed:false,unavailable:false,retryAfter:60-Math.floor(Date.now()/1000)%60};
 }
 export async function POST(request){
+ if(!isAuthenticated(request))return fail("ავტორიზაცია აუცილებელია",401);
  let body;try{body=await request.json();}catch{return fail("არასწორი მოთხოვნა",400)}
  if(typeof body?.url!=="string"||body.url.length>2048)return fail("შეიყვანეთ სწორი ბმული",400);
  let target;try{target=new URL(body.url.trim());}catch{return fail("არასწორი URL",400)}
@@ -37,7 +39,7 @@ export async function POST(request){
  for(let i=0;i<4;i++){
   const slug=randomBytes(6).toString("base64url");
   try{await put("links/"+slug+".txt",target.toString(),{access:"private",addRandomSuffix:false,contentType:"text/plain; charset=utf-8"});
-   const shortUrl=new URL("/"+slug,request.url).toString();return NextResponse.json({shortUrl,slug},{headers:{"cache-control":"no-store"}});
+   const shortUrl="https://isurve.link/"+slug;return NextResponse.json({shortUrl,slug},{headers:{"cache-control":"no-store"}});
   }catch(error){if(error?.code==="BLOB_ALREADY_EXISTS")continue;console.error("Link creation failure",error);return fail("ბმული ვერ შეიქმნა",500);}
  }
  return fail("სცადეთ თავიდან",503);
