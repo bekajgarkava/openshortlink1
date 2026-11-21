@@ -25,10 +25,10 @@ export default function Home() {
  return <main style={{maxWidth:620,margin:"12vh auto",padding:24}}><section style={{background:"white",padding:32,borderRadius:20,boxShadow:"0 8px 30px #14213d15"}}>
   <h1 style={{marginTop:0}}>ISURVE Link Shortener</h1>
   {authenticated===null?<p>იტვირთება...</p>:authenticated?
-   <><div style={{display:"flex",alignItems:"center",justifyContent:"space-between",gap:12}}><p>შეამცირე მხოლოდ isurve.ge-ის ბმულები.</p><button onClick={logout} style={{padding:9,cursor:"pointer"}}>გასვლა</button></div>
+   <><div style={{display:"flex",alignItems:"center",justifyContent:"space-between",gap:12}}><button onClick={logout} style={{padding:9,cursor:"pointer"}}>გასვლა</button></div>
    <form onSubmit={submit}><input aria-label="ბმული" type="url" required placeholder="https://isurve.ge/products/..." value={url} onChange={e=>setUrl(e.target.value)} style={inputStyle}/><button disabled={busy} style={btnStyle}>{busy?"მუშავდება...":"შემოკლება"}</button></form>
-   {result&&<div style={{marginTop:22,overflowWrap:"anywhere"}}><a href={result} target="_blank" rel="noreferrer">{result}</a><button onClick={()=>navigator.clipboard.writeText(result)} style={{marginLeft:12,padding:8}}>კოპირება</button></div>}
-   <p style={{color:"#697586",fontSize:13}}>ლიმიტი: 10 მოთხოვნა წუთში თითო IP მისამართზე.</p></>:
+   {result&&<div style={{marginTop:22,overflowWrap:"anywhere",display:"flex",flexDirection:"column",gap:12}}><a href={result} target="_blank" rel="noreferrer" style={{fontSize:16,wordBreak:"break-all"}}>{result}</a><button type="button" onClick={()=>navigator.clipboard.writeText(result)} style={{...btnStyle,marginTop:0,width:"100%",minHeight:52,fontWeight:600,touchAction:"manipulation"}}>კოპირება</button></div>}
+   </>:
    <form onSubmit={login}><p>ადმინისტრატორის შესვლა</p><label htmlFor="username">მომხმარებელი</label><input id="username" autoComplete="username" value={username} onChange={e=>setUsername(e.target.value)} required style={{...inputStyle,margin:"8px 0 16px"}}/><label htmlFor="password">პაროლი</label><input id="password" type="password" autoComplete="current-password" value={password} onChange={e=>setPassword(e.target.value)} required style={{...inputStyle,marginTop:8}}/><button disabled={busy} style={btnStyle}>{busy?"მუშავდება...":"შესვლა"}</button></form>}
   {error&&<p role="alert" style={{color:"#b42318"}}>{error}</p>}
  </section></main>;
