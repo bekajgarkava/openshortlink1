@@ -82,7 +82,7 @@ export default function Home(){
       </form>
       {smsError&&<p className="message" role="alert">{smsError}</p>}
       {smsInfo&&<div className="sms-success" role="status"><Icon name="check" size={21}/><strong>{smsInfo}</strong></div>}
-      <a className="sms-history-link" href="/sms/history">გაგზავნების ისტორია</a>
+      <div className="sms-history-actions"><a className="sms-history-link" href="/sms/history"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span>ისტორია</span></a></div>
      </div>}
      </>:<form onSubmit={login}>
       <div className="field-group"><label className="field-label" htmlFor="username">მომხმარებელი</label><input className="field" id="username" autoComplete="username" value={username} onChange={e=>setUsername(e.target.value)} required/></div>
