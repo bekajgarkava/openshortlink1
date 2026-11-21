@@ -2,7 +2,7 @@ import { put } from "@vercel/blob";
 import { createHash, randomBytes } from "node:crypto";
 import { ipAddress } from "@vercel/functions";
 import { NextResponse } from "next/server";
-import { isAuthenticated } from "../../../lib/auth";
+import { isAuthenticated, checkOrigin } from "../../../lib/auth";
 export const runtime = "nodejs";
 const fail=(error,status,headers={})=>NextResponse.json({error},{status,headers:{"cache-control":"no-store",...headers}});
 // Fixed 60-second windows, 10 successful reservations per client IP.
@@ -27,7 +27,8 @@ async function consumeQuota(request){
  return {allowed:false,unavailable:false,retryAfter:60-Math.floor(Date.now()/1000)%60};
 }
 export async function POST(request){
- if(!isAuthenticated(request))return fail("ავტორიზაცია აუცილებელია",401);
+ if(!checkOrigin(request))return fail("მოთხოვნის არასწორი წყარო",403);
+ if(!(await isAuthenticated(request)))return fail("ავტორიზაცია აუცილებელია",401);
  let body;try{body=await request.json();}catch{return fail("არასწორი მოთხოვნა",400)}
  if(typeof body?.url!=="string"||body.url.length>2048)return fail("შეიყვანეთ სწორი ბმული",400);
  let target;try{target=new URL(body.url.trim());}catch{return fail("არასწორი URL",400)}
