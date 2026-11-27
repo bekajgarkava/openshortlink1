@@ -1,18 +1,24 @@
 "use client";
 import {useEffect,useState} from "react";
 export default function SmsHistory(){
- const [items,setItems]=useState([]),[offset,setOffset]=useState(0),[more,setMore]=useState(false),[loading,setLoading]=useState(true),[error,setError]=useState("");
- async function load(nextOffset=0){
-  setLoading(true);setError("");
-  try{
-   const r=await fetch("/api/sms/history?offset="+nextOffset,{cache:"no-store"});
-   const data=await r.json();if(!r.ok)throw Error(data.error||"ისტორია ვერ ჩაიტვირთა");
-   setItems(prev=>nextOffset?prev.concat(data.records):data.records);
-   setOffset(nextOffset+data.records.length);
-   setMore(data.hasMore);
-  }catch(e){setError(e.message);}finally{setLoading(false);}
- }
- useEffect(()=>{(async()=>{try{await fetch("/api/sms/history/cleanup",{method:"POST"});}catch{}await load();})();},[]);
+ const [items,setItems]=useState([]),[page,setPage]=useState(1),[lastKnown,setLastKnown]=useState(1),[more,setMore]=useState(false),[loading,setLoading]=useState(true),[error,setError]=useState("");
+ useEffect(()=>{
+  const controller=new AbortController();
+  setLoading(true);setError("");setItems([]);
+  (async()=>{
+   try{
+    const r=await fetch("/api/sms/history?page="+page,{cache:"no-store",signal:controller.signal});
+    const data=await r.json();if(!r.ok)throw Error(data.error||"ისტორია ვერ ჩაიტვირთა");
+    if(controller.signal.aborted)return;
+    setItems(data.records);setMore(data.hasMore);
+    setLastKnown(prev=>data.hasMore?Math.max(prev,page+1):Math.min(prev,page));
+   }catch(e){if(!controller.signal.aborted)setError(e.message);}
+   finally{if(!controller.signal.aborted)setLoading(false);}
+  })();
+  return ()=>controller.abort();
+ },[page]);
+ const pages=Array.from({length:Math.min(lastKnown,7)},(_,i)=>Math.max(1,Math.min(page-3,lastKnown-6))+i);
+ const go=n=>{if(!loading&&n>=1&&n<=lastKnown&&n!==page){setLoading(true);setPage(n);}};
  return <main className="shell"><div className="container">
   <header className="topbar"><a className="brand" href="/"><span className="brandmark">↗</span><span>ISURVE<small>TOOLS</small></span></a><a className="sms-history-link" href="/">← უკან დაბრუნება</a></header>
   <section className="panel sms-history-page"><h1>SMS-ის ისტორია</h1>
@@ -20,7 +26,13 @@ export default function SmsHistory(){
    {!loading&&!items.length&&!error&&<p className="sms-empty">ისტორია ჯერ ცარიელია.</p>}
    {error&&<p role="alert" className="message">{error}</p>}
    {loading&&<p className="sms-empty">იტვირთება...</p>}
-   {more&&!loading&&<button type="button" className="sms-secondary" onClick={()=>load(offset)}>მეტის ნახვა</button>}
+   {(lastKnown>1||page>1)&&<nav aria-label="ისტორიის გვერდები" style={{display:"flex",flexWrap:"wrap",gap:8,justifyContent:"center",alignItems:"center",marginTop:20}}>
+    <button type="button" className="sms-secondary" disabled={loading||page===1} onClick={()=>go(page-1)}>←</button>
+    {pages[0]>1&&<button type="button" className="sms-secondary" disabled={loading} onClick={()=>go(1)}>1</button>}
+    {pages[0]>2&&<span>…</span>}
+    {pages.map(n=><button key={n} type="button" className="sms-secondary" aria-current={n===page?"page":undefined} disabled={loading||n===page} style={n===page?{background:"#2563eb",color:"white",opacity:1}:undefined} onClick={()=>go(n)}>{n}</button>)}
+    <button type="button" className="sms-secondary" disabled={loading||(!more&&page>=lastKnown)} onClick={()=>go(page+1)}>→</button>
+   </nav>}
   </section>
  </div></main>;
 }
